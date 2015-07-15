@@ -2,15 +2,16 @@
 
 ## Build & Run ##
 
-First add a file with your config settings ( look at src/main/resources/reference.conf for the keys) and then assign the
-location to fileLocation variable in ScalatraBootstrap class
+This service integrates with mandrill and mailgun. First setup accounts and get api keys for calling these services
+using the API. Then add a file with your config settings ( look at src/main/resources/reference.conf for the keys)
+and assign your file location to fileLocation variable in ScalatraBootstrap class
 ```sh
-$ cd ScalatraEmail
+$ cd scalatrasmail
 $ ./sbt
 > container:start
 ```
 
-Then call the service as follows:
+You can call the service as follows:
 ```sh
 $ curl -m 3600 -isb -X POST -H "Content-Type: application/json" -d '{"person": {"firstName":"xyz","lastName":"xyz", "emailAddress":"abc@ced.com"}, "emailType": "Birthday"}' http://localhost:8080/emails
 ```
