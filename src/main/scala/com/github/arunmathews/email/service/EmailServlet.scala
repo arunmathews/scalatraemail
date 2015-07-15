@@ -30,10 +30,6 @@ class EmailServlet(val emailComponent: EmailComponent)
     contentType = formats("json")
   }
 
-  get("/") {
-    Person("a", "b", "c")
-  }
-
   protected override def transformRequestBody(body: JValue): JValue = body.camelizeKeys
 
   protected override def transformResponseBody(body: JValue): JValue = body.underscoreKeys

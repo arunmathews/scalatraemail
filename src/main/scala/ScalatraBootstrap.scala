@@ -1,7 +1,7 @@
 import java.io.File
 
-import com.github.arunmathews.email.controller.{MandrillEmailComponentConcrete, MailGunEmailComponentConcrete}
-import com.github.arunmathews.email.service.{HelloServlet, EmailServlet}
+import com.github.arunmathews.email.controller._
+import com.github.arunmathews.email.service.EmailServlet
 import com.typesafe.config.ConfigFactory
 import org.scalatra._
 import javax.servlet.ServletContext
@@ -11,8 +11,7 @@ class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
     val myCfg =  ConfigFactory.parseFile(new File("/Volumes/Unix/personal/Programming/Scala/Scalatra/scalatraemail/override.conf"))
     val conf = ConfigFactory.load(myCfg)
-    
-    context.mount(new HelloServlet, "/ping/*")
+
     val maybeMandrillApiKey = conf.opt[String]("mandrillApiKey")
     val maybeMandrillSender = conf.opt[String]("mandrillSender")
     val maybeMailGunApiKey= conf.opt[String]("mailGunApiKey")
@@ -28,7 +27,9 @@ class ScalatraBootstrap extends LifeCycle {
 
     (maybeMandrillEmailComponent, maybeMailGunEmailComponent) match {
       case (Some(mandrillEmailComponent), Some(mailGunEmailComponent)) =>
-        context.mount(new EmailServlet(mandrillEmailComponent), "/emails/*")
+        val backupEmailComponent = new BackupEmailComponentConcrete(mandrillEmailComponent, mailGunEmailComponent)
+        //TODO: Reject all other urls
+        context.mount(new EmailServlet(backupEmailComponent), "/emails/*")
       case (_, _) => throw new RuntimeException("Components to start servlet not available")
     }
   }
