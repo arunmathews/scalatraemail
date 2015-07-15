@@ -1,6 +1,7 @@
 import java.io.File
 
 import com.github.arunmathews.email.controller._
+import com.github.arunmathews.email.exception.EmailServiceException
 import com.github.arunmathews.email.service.EmailServlet
 import com.typesafe.config.ConfigFactory
 import org.scalatra._
@@ -9,7 +10,8 @@ import com.github.kxbmap.configs._
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
-    val myCfg =  ConfigFactory.parseFile(new File("/Volumes/Unix/personal/Programming/Scala/Scalatra/scalatraemail/override.conf"))
+    val fileLocation = "/Volumes/Unix/personal/Programming/Scala/Scalatra/scalatraemail/override.conf"
+    val myCfg =  ConfigFactory.parseFile(new File(fileLocation))
     val conf = ConfigFactory.load(myCfg)
 
     val maybeMandrillApiKey = conf.opt[String]("mandrillApiKey")
@@ -30,7 +32,7 @@ class ScalatraBootstrap extends LifeCycle {
         val backupEmailComponent = new BackupEmailComponentConcrete(mandrillEmailComponent, mailGunEmailComponent)
         //TODO: Reject all other urls
         context.mount(new EmailServlet(backupEmailComponent), "/emails/*")
-      case (_, _) => throw new RuntimeException("Components to start servlet not available")
+      case (_, _) => throw new EmailServiceException("Components to start servlet not available")
     }
   }
 }
