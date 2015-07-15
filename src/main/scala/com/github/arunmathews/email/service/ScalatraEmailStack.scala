@@ -1,13 +1,15 @@
-package com.github.arunmathews.app
+package com.github.arunmathews.email.service
 
-import org.scalatra._
-import scalate.ScalateSupport
-import org.fusesource.scalate.{ TemplateEngine, Binding }
-import org.fusesource.scalate.layout.DefaultLayoutStrategy
 import javax.servlet.http.HttpServletRequest
-import collection.mutable
 
-trait ScalatraemailStack extends ScalatraServlet with ScalateSupport {
+import org.fusesource.scalate.TemplateEngine
+import org.fusesource.scalate.layout.DefaultLayoutStrategy
+import org.scalatra._
+import org.scalatra.scalate.ScalateSupport
+
+import scala.collection.mutable
+
+trait ScalatraEmailStack extends ScalatraServlet with ScalateSupport {
 
   /* wire up the precompiled templates */
   override protected def defaultTemplatePath: List[String] = List("/WEB-INF/templates/views")
