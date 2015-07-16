@@ -6,7 +6,7 @@ This service integrates with mandrill and mailgun. First setup accounts and get 
 using the API. Then add a file with your config settings ( look at src/main/resources/reference.conf for the keys)
 and assign your file location to fileLocation variable in ScalatraBootstrap class
 ```sh
-$ cd scalatrasmail
+$ cd scalatraemail
 $ ./sbt
 > container:start
 ```
