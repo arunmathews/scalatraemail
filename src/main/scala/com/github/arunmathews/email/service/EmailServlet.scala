@@ -57,6 +57,11 @@ class EmailServlet(val emailComponent: EmailComponent)
       }
   }
 
+  notFound {
+    contentType = null
+    resourceNotFound()
+  }
+
   override def render(value: json4s.JValue)(implicit formats: Formats): json4s.JValue = ???
 
   override protected implicit def executor: ExecutionContext = global

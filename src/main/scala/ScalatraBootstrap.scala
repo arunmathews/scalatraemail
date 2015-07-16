@@ -2,7 +2,7 @@ import java.io.File
 
 import com.github.arunmathews.email.controller._
 import com.github.arunmathews.email.exception.EmailServiceException
-import com.github.arunmathews.email.service.EmailServlet
+import com.github.arunmathews.email.service.{RootServlet, EmailServlet}
 import com.typesafe.config.ConfigFactory
 import org.scalatra._
 import javax.servlet.ServletContext
@@ -29,9 +29,10 @@ class ScalatraBootstrap extends LifeCycle {
 
     (maybeMandrillEmailComponent, maybeMailGunEmailComponent) match {
       case (Some(mandrillEmailComponent), Some(mailGunEmailComponent)) =>
-        val backupEmailComponent = new BackupEmailComponentConcrete(mandrillEmailComponent, mailGunEmailComponent)
+        val backupEmailComponent = new FailoverEmailComponentConcrete(mandrillEmailComponent, mailGunEmailComponent)
         //TODO: Reject all other urls
         context.mount(new EmailServlet(backupEmailComponent), "/emails/*")
+        context.mount(new RootServlet(), "/*")
       case (_, _) => throw new EmailServiceException("Components to start servlet not available")
     }
   }
